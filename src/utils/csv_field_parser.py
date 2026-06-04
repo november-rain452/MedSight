@@ -16,4 +16,4 @@ def parse_csv_field_to_list(value):
         cleaned = str_val.replace('""', '"')
         return ast.literal_eval(cleaned)
     except Exception:
-        return [v.strip() for v in value.split(",") if v.strip()]
+        return [v.strip() for v in str_val.split(",") if v.strip()]
