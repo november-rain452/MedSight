@@ -1,0 +1,18 @@
+from .csv_field_parser import parse_csv_field_to_list
+
+
+def transform_row(row):
+    return {
+        "id": row.get("unique_id"),
+        "name": row.get("name"),
+        "specialties": parse_csv_field_to_list(row.get("specialties")),
+        "procedure": parse_csv_field_to_list(row.get("procedure")),
+        "equipment": parse_csv_field_to_list(row.get("equipment")),
+        "capability": parse_csv_field_to_list(row.get("capability")),
+        "description": row.get("description"),
+        "location": {
+            "city": row.get("address_city"),
+            "country": row.get("address_country"),
+        },
+        "facility_type": row.get("facilityTypeId"),
+    }
