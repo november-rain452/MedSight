@@ -9,11 +9,17 @@ def parse_csv_field_to_list(value):
 
     str_val = str(value).strip()
 
-    if str_val in ["", "None", "null"]:
+    if str_val.lower() in ["", "None", "null", "nan"]:
         return []
 
     try:
         cleaned = str_val.replace('""', '"')
-        return ast.literal_eval(cleaned)
+        parsed = ast.literal_eval(cleaned)
+
+        return [v for v in parsed if str(v).lower() != "nan"]
     except Exception:
-        return [v.strip() for v in str_val.split(",") if v.strip()]
+        return [
+            v.strip()
+            for v in str_val.split(",")
+            if v.strip() and v.strip().lower() != "nan"
+        ]
