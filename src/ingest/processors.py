@@ -1,3 +1,7 @@
+def clean_text(text):
+    return text.replace("  ", " ".strip())
+
+
 def facility_to_documents(facility: dict) -> list[dict]:
     """Creates a document out of facilities to store for RAG/Retrieval"""
 
@@ -22,17 +26,19 @@ def facility_to_documents(facility: dict) -> list[dict]:
         )
 
     if facility.get("capability"):
+        text = f"Facility : {name}. Capabilities include : {', '.join(facility["capability"])}"
         docs.append(
             {
-                "text": f"{name}'s capabilities include : {', '.join(facility["capability"])}",
+                "text": clean_text(text),
                 "metadata": {"facility_id": fid, "type": "capability"},
             }
         )
 
     if facility.get("description"):
+        text = f"Facility : {name}. Description : {facility["description"]}"
         docs.append(
             {
-                "text": f"{facility["description"]}",
+                "text": clean_text(text),
                 "metadata": {"facility_id": fid, "type": "description"},
             }
         )
