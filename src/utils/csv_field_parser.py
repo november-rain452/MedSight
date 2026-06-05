@@ -9,7 +9,7 @@ def parse_csv_field_to_list(value):
 
     str_val = str(value).strip()
 
-    if str_val.lower() in ["", "None", "null", "nan"]:
+    if str_val.lower() in ["", "none", "null", "nan"]:
         return []
 
     try:
@@ -23,3 +23,17 @@ def parse_csv_field_to_list(value):
             for v in str_val.split(",")
             if v.strip() and v.strip().lower() != "nan"
         ]
+
+
+def parse_csv_field_to_str(value):
+    "Processes fields into strings"
+
+    if value is None:
+        return ""
+
+    str_val = str(value).strip()
+
+    if str_val.lower() in ["", "none", "null", "nan"]:
+        return ""
+
+    return str_val.strip()
