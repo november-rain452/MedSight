@@ -1,4 +1,4 @@
-from .csv_field_parser import parse_csv_field_to_list
+from .csv_field_parser import parse_csv_field_to_list, parse_csv_field_to_str
 
 
 def transform_row(row):
@@ -9,7 +9,7 @@ def transform_row(row):
         "procedure": parse_csv_field_to_list(row.get("procedure")),
         "equipment": parse_csv_field_to_list(row.get("equipment")),
         "capability": parse_csv_field_to_list(row.get("capability")),
-        "description": row.get("description"),
+        "description": parse_csv_field_to_str(row.get("description")),
         "location": {
             "city": row.get("address_city"),
             "country": row.get("address_country"),
