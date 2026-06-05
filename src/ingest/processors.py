@@ -28,3 +28,12 @@ def facility_to_documents(facility: dict) -> list[dict]:
                 "metadata": {"facility_id": fid, "type": "capability"},
             }
         )
+
+    if facility.get("description"):
+        docs.append(
+            {
+                "text": f"{facility["description"]}",
+                "metadata": {"facility_id": fid, "type": "description"},
+            }
+        )
+    return docs
