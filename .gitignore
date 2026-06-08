@@ -219,3 +219,5 @@ __marimo__/
 
 #local files i dont want getting tracked
 databricks/
+#database
+chroma_db/
