@@ -24,8 +24,13 @@ def add_documents(documents):
         )
 
 
-def query_documents(query, n_results=5):
-    results = collection.query(query_texts=query, n_results=n_results)
+def query_documents(query, n_results=5, doc_type=None):
+    where_filter = None
+    if doc_type:
+        where_filter = {"type": doc_type}
+    results = collection.query(
+        query_texts=query, n_results=n_results, where=where_filter
+    )
     return results
 
 
