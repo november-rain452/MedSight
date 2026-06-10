@@ -5,12 +5,22 @@ import hashlib
 
 
 def add_documents(documents):
-    for _, doc in enumerate(documents):
+    batch_doc = []
+    batch_metas = []
+    batch_ids = []
+    for doc in documents:
         hash = hashlib.md5(doc["text"].encode("utf-8")).hexdigest()[:8]
-        collection.add(
-            documents=[doc["text"]],
-            metadatas=[doc["metadata"]],
-            ids=[f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{hash}"],
+
+        batch_doc.append(doc["text"]),
+        batch_metas.append(doc["metadata"]),
+        batch_ids.append(
+            f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{hash}"
+        ),
+    if batch_ids:
+        collection.upsert(
+            ids=batch_ids,
+            documents=batch_doc,
+            metadatas=batch_metas,
         )
 
 
