@@ -1,7 +1,10 @@
 def format_chroma_retrieval_output(output):
-    docs = output["documents"][0]
-    metas = output["metadatas"][0]
-    distances = output["distances"][0]
+    docs = output["documents"]
+    metas = output["metadatas"]
+    distances = output["distances"]
+    if not docs:
+        print("No relevant results found.")
+        return None
     for i in range(len(docs)):
 
         print(f"\nResult no: {i+1}")

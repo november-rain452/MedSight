@@ -24,14 +24,26 @@ def add_documents(documents):
         )
 
 
-def query_documents(query, n_results=5, doc_type=None):
+def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     where_filter = None
     if doc_type:
         where_filter = {"type": doc_type}
     results = collection.query(
         query_texts=query, n_results=n_results, where=where_filter
     )
-    return results
+    filtered = {"documents": [], "metadatas": [], "distances": []}
+
+    docs = results["documents"][0]
+    metas = results["metadatas"][0]
+    dists = results["distances"][0]
+
+    for doc, meta, dist in zip(docs, metas, dists):
+        if dist <= dist_threshold:
+            filtered["documents"].append(doc)
+            filtered["metadatas"].append(meta)
+            filtered["distances"].append(dist)
+
+    return filtered
 
 
 def count_docs():
