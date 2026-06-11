@@ -1,4 +1,5 @@
 from ..database.vectors.vector_store_config import collection
+from .retrieval_utils import extract_keyword, if_keyword_exists
 
 # add hashid instead of loop numbers
 import hashlib
@@ -31,6 +32,9 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     results = collection.query(
         query_texts=query, n_results=n_results, where=where_filter
     )
+
+    extracted_keywords = extract_keyword(query)
+
     filtered = {"documents": [], "metadatas": [], "distances": []}
 
     docs = results["documents"][0]
@@ -38,7 +42,7 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     dists = results["distances"][0]
 
     for doc, meta, dist in zip(docs, metas, dists):
-        if dist <= dist_threshold:
+        if dist <= dist_threshold and if_keyword_exists(doc, extracted_keywords):
             filtered["documents"].append(doc)
             filtered["metadatas"].append(meta)
             filtered["distances"].append(dist)
