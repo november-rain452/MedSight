@@ -1,6 +1,7 @@
 import pandas as pd
+from src.ingest import transformer
+from src.retrieval.retrieval_utils import format_chroma_retrieval_output
 from src.retrieval.vector_store import add_documents, count_docs, query_documents
-from src.utils import transformer, formatter
 from src.ingest.processors import facility_to_documents
 from src.database.vectors.vector_store_config import collection
 
@@ -11,7 +12,7 @@ from src.database.vectors.vector_store_config import collection
 #     document = facility_to_documents(facility)
 #     add_documents(document)
 
-query = "HIV and AIDS"
-output = query_documents(query, n_results=5, doc_type="capability", dist_threshold=2)
-formatter.format_chroma_retrieval_output(output)
+query = "HIV research"
+output = query_documents(query, n_results=5, doc_type="capability", dist_threshold=0.8)
+format_chroma_retrieval_output(output)
 print(count_docs())
