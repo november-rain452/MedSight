@@ -15,3 +15,16 @@ class Facilities(Base):
     facility_type = Column(String(255))
 
     freeform = relationship("Freeform", back_populates="facility", uselist=False)
+
+
+class Freeforms(Base):
+    __tablename__ = "freeforms"
+
+    id = Column(Integer, primary_key=True)
+    procedure = Column(String(255))
+    equipment = Column(String(255))
+    capability = Column(String(255))
+
+    facility_id = Column(Integer, ForeignKey("facilities.id"))
+
+    facility = relationship("Facilities", back_populates="freeform")
