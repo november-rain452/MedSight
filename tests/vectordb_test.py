@@ -5,7 +5,7 @@ from src.retrieval.vector_store import add_documents, count_docs, query_document
 from src.ingest.processors import facility_to_documents
 from src.database.vectors.vector_store_config import collection
 
-# df = pd.read_csv("databricks/Virtue Foundation Ghana v0.3 - Sheet1.csv")
+# df = pd.read_csv("src/data/virtue foundation ghana.csv")
 # for i in range(10):
 #     row = df.iloc[i].to_dict()
 #     facility = transformer.transform_row(row)
