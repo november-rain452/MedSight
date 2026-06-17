@@ -3,7 +3,7 @@ from core.sql_database import Base
 from sqlalchemy.orm import relationship
 
 
-class Facilities(Base):
+class Facility(Base):
     __tablename__ = "facilities"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -17,7 +17,7 @@ class Facilities(Base):
     freeform = relationship("Freeform", back_populates="facility", uselist=False)
 
 
-class Freeforms(Base):
+class Freeform(Base):
     __tablename__ = "freeforms"
 
     id = Column(Integer, primary_key=True)
@@ -25,6 +25,6 @@ class Freeforms(Base):
     equipment = Column(String(255))
     capability = Column(String(255))
 
-    facility_id = Column(Integer, ForeignKey("facilities.id"))
+    facility_id = Column(Integer, ForeignKey("facilities.id"), unique=True)
 
-    facility = relationship("Facilities", back_populates="freeform")
+    facility = relationship("Facility", back_populates="freeform")
