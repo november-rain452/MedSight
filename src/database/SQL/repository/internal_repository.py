@@ -7,10 +7,14 @@ from sqlalchemy.orm import Session
 def insert_facility_freeform_repository(
     db: Session, freeform_data: FreeformCreate, facility_data: FacilityCreate
 ):
-    facility = Facility(**facility_data.model_dump())
-    freeform = Freeform(**freeform_data.model_dump())
+    try:
+        facility = Facility(**facility_data.model_dump())
+        freeform = Freeform(**freeform_data.model_dump())
 
-    facility.freeform = freeform
+        facility.freeform = freeform
 
-    db.add(facility)
-    return facility
+        db.add(facility)
+        return facility
+    except Exception:
+        db.rollback()
+        raise

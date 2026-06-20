@@ -11,4 +11,5 @@ def insert_facility_freeform_service(
         facility = insert_facility_freeform_repository(db, freeform_data, facility_data)
         db.commit()
         db.refresh(facility)
+        db.refresh(facility.freeform)
         return facility
