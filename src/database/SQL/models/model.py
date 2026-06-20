@@ -25,6 +25,8 @@ class Freeform(Base):
     equipment = Column(String(255))
     capability = Column(String(255))
 
-    facility_id = Column(Integer, ForeignKey("facilities.id"), unique=True)
+    facility_id = Column(
+        Integer, ForeignKey("facilities.id"), unique=True, nullable=False
+    )
 
     facility = relationship("Facility", back_populates="freeform")
