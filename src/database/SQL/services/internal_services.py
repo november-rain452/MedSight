@@ -1,7 +1,10 @@
 from ..schemas.facility_schema import FacilityCreate
 from ..schemas.freeform_schema import FreeformCreate
 from ....core.sql_database import SessionLocal
-from ..repository.internal_repository import insert_facility_freeform_repository
+from ..repository.internal_repository import (
+    insert_facility_freeform_repository,
+    get_facility_freeform_by_id,
+)
 
 
 def insert_facility_freeform_service(
@@ -12,4 +15,10 @@ def insert_facility_freeform_service(
         db.commit()
         db.refresh(facility)
         db.refresh(facility.freeform)
+        return facility
+
+
+def get_facility_freeform_by_id_service(facility_id: int):
+    with SessionLocal() as db:
+        facility = get_facility_freeform_by_id(db, facility_id)
         return facility
