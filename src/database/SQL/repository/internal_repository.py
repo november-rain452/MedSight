@@ -8,6 +8,11 @@ from sqlalchemy import select
 def insert_facility_freeform_repository(
     db: Session, freeform_data: FreeformCreate, facility_data: FacilityCreate
 ):
+    existing = db.query(Facility).filter(Facility.fid == facility_data.fid).first()
+
+    if existing:
+        raise Exception("Facility already exists")
+
     try:
         facility = Facility(**facility_data.model_dump())
         freeform = Freeform(**freeform_data.model_dump())
