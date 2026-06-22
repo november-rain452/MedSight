@@ -7,6 +7,10 @@ class FreeformCreate(BaseModel):
     capability: str
 
 
+class FreeformData(FreeformCreate):
+    pass
+
+
 class FreeformResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
