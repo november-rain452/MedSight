@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey, JSON
 from core.sql_database import Base
 from sqlalchemy.orm import relationship
 
@@ -9,7 +9,7 @@ class Facility(Base):
     id = Column(Integer, primary_key=True, index=True)
     fid = Column(String(255))
     name = Column(String(255))
-    specialties = Column(String(255))
+    specialties = Column(JSON)
     city = Column(String(255))
     country = Column(String(255))
     facility_type = Column(String(255))
@@ -21,9 +21,9 @@ class Freeform(Base):
     __tablename__ = "freeforms"
 
     id = Column(Integer, primary_key=True)
-    procedure = Column(String(255))
-    equipment = Column(String(255))
-    capability = Column(String(255))
+    procedure = Column(JSON)
+    equipment = Column(JSON)
+    capability = Column(JSON)
 
     facility_id = Column(
         Integer, ForeignKey("facilities.id"), unique=True, nullable=False
