@@ -3,7 +3,7 @@ from .csv_field_parser import parse_csv_field_to_list, parse_csv_field_to_str
 
 def transform_row(row):
     return {
-        "id": row.get("unique_id"),
+        "fid": row.get("unique_id"),
         "name": parse_csv_field_to_str(row.get("name")),
         "specialties": parse_csv_field_to_list(row.get("specialties")),
         "procedure": parse_csv_field_to_list(row.get("procedure")),
@@ -14,5 +14,5 @@ def transform_row(row):
             "city": parse_csv_field_to_str(row.get("address_city")),
             "country": parse_csv_field_to_str(row.get("address_country")),
         },
-        "facility_type": row.get("facilityTypeId"),
+        "facility_type": parse_csv_field_to_str(row.get("facilityTypeId")),
     }

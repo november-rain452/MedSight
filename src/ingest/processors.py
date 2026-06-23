@@ -6,7 +6,7 @@ def facility_to_documents(facility: dict) -> list[dict]:
     """Creates a document out of facilities to store for RAG/Retrieval"""
 
     docs = []
-    fid = facility["id"]
+    fid = facility["fid"]
     name = facility.get("name", "Unknown Facility")
 
     if facility.get("procedure"):
