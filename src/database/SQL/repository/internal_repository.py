@@ -3,6 +3,7 @@ from ..schemas.freeform_schema import FreeformCreate, FreeformData
 from ..models.model import Facility, Freeform
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
+from ....utils.custom_exceptions import DuplicateFacilityError, FacilityNotFoundError
 
 
 def insert_facility_freeform_repository(
@@ -11,28 +12,24 @@ def insert_facility_freeform_repository(
     existing = db.query(Facility).filter(Facility.fid == facility_data.fid).first()
 
     if existing:
-        raise Exception("Facility already exists")
+        raise DuplicateFacilityError("Facility already exists")
 
-    try:
-        facility = Facility(**facility_data.model_dump())
-        freeform = Freeform(**freeform_data.model_dump())
+    facility = Facility(**facility_data.model_dump())
+    freeform = Freeform(**freeform_data.model_dump())
 
-        facility.freeform = freeform
+    facility.freeform = freeform
 
-        db.add(facility)
-        return facility
-    except Exception:
-        db.rollback()
-        raise
+    db.add(facility)
+    return facility
 
 
 def update_or_insert_freeform(
     db: Session, facility_id: int, freeform_data: FreeformData
 ):
-    facility = db.query(Facility).filter(facility_id == Facility.id).first()
+    facility = db.query(Facility).filter(Facility.id == facility_id).first()
 
     if not facility:
-        raise Exception("Facility not found")
+        raise FacilityNotFoundError("Facility not found")
 
     if facility.freeform:
         facility.freeform.procedure = freeform_data.procedure
