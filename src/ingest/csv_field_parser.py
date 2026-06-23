@@ -26,7 +26,7 @@ def parse_csv_field_to_list(value):
 
 
 def parse_csv_field_to_str(value):
-    "Processes CSV fields into strings safely"
+    """Processes CSV fields into strings safely"""
 
     if value is None:
         return ""
