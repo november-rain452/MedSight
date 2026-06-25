@@ -7,9 +7,10 @@ class Facility(Base):
     __tablename__ = "facilities"
 
     id = Column(Integer, primary_key=True, index=True)
-    fid = Column(String(255))
+    fid = Column(String(255), nullable=False)
     name = Column(String(255))
     specialties = Column(JSON)
+    organization_type = Column(String(255))
     city = Column(String(255))
     country = Column(String(255))
     facility_type = Column(String(255))
