@@ -25,15 +25,15 @@ def parse_csv_field_to_list(value):
         ]
 
 
-def parse_csv_field_to_str(value):
-    """Processes CSV fields into strings safely"""
+def parse_csv_field_to_none(value):
+    """Convert invalid CSV values to None so they are stored as SQL NULL."""
 
     if value is None:
-        return ""
+        return None
 
-    str_val = str(value).strip()
+    value = str(value).strip()
 
-    if str_val.lower() in ["", "none", "null", "nan"]:
-        return ""
+    if value.lower() in {"", "none", "null", "nan"}:
+        return None
 
-    return str_val.strip()
+    return value
