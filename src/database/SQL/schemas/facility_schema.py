@@ -6,9 +6,10 @@ class FacilityCreate(BaseModel):
     fid: str
     name: str
     specialties: list[str]
-    city: str
-    country: str
-    facility_type: str
+    organization_type: str | None = None
+    city: str | None = None
+    country: str | None = None
+    facility_type: str | None = None
 
 
 class FacilityResponse(BaseModel):
@@ -17,7 +18,8 @@ class FacilityResponse(BaseModel):
 
     name: str
     specialties: list[str]
-    city: str
-    country: str
-    facility_type: str
+    organization_type: str | None = None
+    city: str | None = None
+    country: str | None = None
+    facility_type: str | None = None
     freeform: FreeformResponse | None = None
