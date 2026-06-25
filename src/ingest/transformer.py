@@ -9,6 +9,7 @@ def transform_row(row):
         "procedure": parse_csv_field_to_list(row.get("procedure")),
         "equipment": parse_csv_field_to_list(row.get("equipment")),
         "capability": parse_csv_field_to_list(row.get("capability")),
+        "organization_type": parse_csv_field_to_str(row.get("organization_type")),
         "description": parse_csv_field_to_str(row.get("description")),
         "location": {
             "city": parse_csv_field_to_str(row.get("address_city")),
