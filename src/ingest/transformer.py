@@ -17,3 +17,18 @@ def transform_row(row):
         },
         "facility_type": parse_csv_field_to_none(row.get("facilityTypeId")),
     }
+
+
+def transform_row_to_facility(row):
+    return {
+        "fid": row["fid"],
+        "name": row["name"],
+        "specialties": row["specialties"],
+        "procedure": row["procedure"],
+        "equipment": row["equipment"],
+        "capability": row["capability"],
+        "organization_type": row["organization_type"],
+        "city": row["location"]["city"],
+        "country": row["location"]["country"],
+        "facility_type": row["facility_type"],
+    }
