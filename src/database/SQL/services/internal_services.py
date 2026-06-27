@@ -26,8 +26,15 @@ def insert_facility_service(facility_data: FacilityCreate):
 
 
 def insert_in_batch_service(batch_sql: list[dict]):
+
+    validated = [FacilityCreate.model_validate(row).model_dump() for row in batch_sql]
     with SessionLocal() as db:
-        return None
+        try:
+            insert_in_batch(db, validated)
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
 
 
 # gets
