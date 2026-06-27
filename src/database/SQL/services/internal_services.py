@@ -1,26 +1,21 @@
 from ..schemas.facility_schema import FacilityCreate
-from ..schemas.freeform_schema import FreeformCreate, FreeformData
 from ....core.sql_database import SessionLocal
 from ..repository.internal_repository import (
-    insert_facility_freeform_repository,
-    get_facility_freeform_by_id,
-    update_or_insert_freeform,
+    insert_facility_repository,
+    insert_in_batch,
+    get_facility_by_id,
 )
-from ....utils.custom_exceptions import DuplicateFacilityError, FacilityNotFoundError
+from ....utils.custom_exceptions import DuplicateFacilityError
 
 
-def insert_facility_freeform_service(
-    freeform_data: FreeformCreate, facility_data: FacilityCreate
-):
+# inserts
+def insert_facility_service(facility_data: FacilityCreate):
     with SessionLocal() as db:
         try:
-            facility = insert_facility_freeform_repository(
-                db, freeform_data, facility_data
-            )
+            facility = insert_facility_repository(db, facility_data)
 
             db.commit()
             db.refresh(facility)
-            db.refresh(facility.freeform)
 
             return facility
         except DuplicateFacilityError:
@@ -30,24 +25,13 @@ def insert_facility_freeform_service(
             raise
 
 
-def update_or_insert_freeform_service(facility_id: int, freeform_data: FreeformData):
-
+def insert_in_batch_service(batch_sql: list[dict]):
     with SessionLocal() as db:
-
-        try:
-            facility = update_or_insert_freeform(db, facility_id, freeform_data)
-            db.commit()
-            db.refresh(facility)
-
-            return facility
-        except FacilityNotFoundError:
-            raise
-        except Exception:
-            db.rollback()
-            raise
+        return None
 
 
-def get_facility_freeform_by_id_service(facility_id: int):
+# gets
+def get_facility_by_id_service(facility_id: int):
     with SessionLocal() as db:
-        facility = get_facility_freeform_by_id(db, facility_id)
+        facility = get_facility_by_id(db, facility_id)
         return facility
