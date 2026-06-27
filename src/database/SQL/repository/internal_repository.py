@@ -1,8 +1,8 @@
 from ..schemas.facility_schema import FacilityCreate, FacilityResponse
 from ..models.model import Facility
 from sqlalchemy.orm import Session
-from sqlalchemy import select
-from ....utils.custom_exceptions import DuplicateFacilityError
+from sqlalchemy import select, insert
+from ....utils.custom_exceptions import DuplicateFacilityError, EmptyBatchError
 
 
 # inserts
@@ -10,7 +10,9 @@ def insert_facility_repository(db: Session, facility_data: FacilityCreate):
     existing = db.query(Facility).filter(Facility.fid == facility_data.fid).first()
 
     if existing:
-        raise DuplicateFacilityError("Facility already exists")
+        raise DuplicateFacilityError(
+            f"Facility with fid {facility_data.fid} already exists"
+        )
 
     facility = Facility(**facility_data.model_dump())
 
@@ -18,8 +20,10 @@ def insert_facility_repository(db: Session, facility_data: FacilityCreate):
     return facility
 
 
-def insert_in_batch(db: Session, facilities: list):
-    return None
+def insert_in_batch(db: Session, facilities: list[dict]):
+    if not facilities:
+        raise EmptyBatchError("No facilities provided for batch inserting")
+    db.execute(insert(Facility), facilities)
 
 
 # gets
