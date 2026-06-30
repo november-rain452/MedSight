@@ -11,12 +11,12 @@ def add_documents(documents):
     batch_metas = []
     batch_ids = []
     for doc in documents:
-        hash = hashlib.md5(doc["text"].encode("utf-8")).hexdigest()[:8]
+        doc_hash = hashlib.md5(doc["text"].encode("utf-8")).hexdigest()[:8]
 
         batch_doc.append(doc["text"]),
         batch_metas.append(doc["metadata"]),
         batch_ids.append(
-            f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{hash}"
+            f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{doc_hash}"
         ),
     if batch_ids:
         collection.upsert(
@@ -34,12 +34,12 @@ def add_documents_in_batch(doc_batch: list[list[dict]]):
 
     for doc_list in doc_batch:
         for doc in doc_list:
-            hash = hashlib.md5(doc["text"].encode("utf-8")).hexdigest()[:8]
+            doc_hash = hashlib.md5(doc["text"].encode("utf-8")).hexdigest()[:8]
 
             batch_doc.append(doc["text"])
             batch_metas.append(doc["metadata"])
             batch_ids.append(
-                f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{hash}"
+                f"{doc['metadata']['facility_id']}_{doc['metadata']['type']}_{doc_hash}"
             )
             if len(batch_ids) >= BATCH_SIZE:
                 collection.upsert(
