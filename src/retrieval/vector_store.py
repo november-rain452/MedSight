@@ -5,6 +5,7 @@ from .retrieval_utils import extract_keyword, if_keyword_exists
 import hashlib
 
 
+# insert/upserting
 def add_documents(documents):
     batch_doc = []
     batch_metas = []
@@ -25,6 +26,7 @@ def add_documents(documents):
         )
 
 
+# querying
 def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     where_filter = None
     if doc_type:
@@ -50,5 +52,6 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     return filtered
 
 
+# collection utils
 def count_docs():
     return collection.count()
