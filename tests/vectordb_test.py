@@ -12,7 +12,7 @@ from src.database.vectors.vector_store_config import collection
 #     document = facility_to_documents(facility)
 #     add_documents(document)
 
-query = "HIV research"
+query = "internal medicine and healthcare"
 output = query_documents(query, n_results=5, doc_type="capability", dist_threshold=0.8)
 format_chroma_retrieval_output(output)
 print(count_docs())
