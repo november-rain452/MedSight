@@ -1,4 +1,5 @@
 import ast
+import pandas as pd
 
 
 def parse_csv_field_to_list(value):
@@ -29,6 +30,9 @@ def parse_csv_field_to_none(value):
     """Convert invalid CSV values to None so they are stored as SQL NULL."""
 
     if value is None:
+        return None
+
+    if pd.isna(value):
         return None
 
     value = str(value).strip()
