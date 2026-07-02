@@ -1,5 +1,5 @@
 from ..schemas.facility_schema import FacilityCreate
-from ....core.sql_database import SessionLocal
+from ..config.sql_database import SessionLocal
 from ..repository.internal_repository import (
     insert_facility_repository,
     insert_in_batch,
