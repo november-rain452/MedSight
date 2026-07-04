@@ -3,6 +3,7 @@ from .sql_ingestor import ingest_sql_db
 from .vector_ingestor import ingest_vector_db
 from .transformer import transform_row, transform_row_to_facility
 from .processors import facility_to_documents
+from ..retrieval.vector_store import delete_all_chroma_docs_when_seed
 
 
 def ingest_orchestrator_func():
@@ -16,6 +17,9 @@ def ingest_orchestrator_func():
         sql_facility = transform_row_to_facility(transformed_facility)
         sql_batch.append(sql_facility)
         vector_batch.append(rag_document)
-
-    ingest_sql_db(sql_batch)
-    ingest_vector_db(vector_batch)
+    try:
+        ingest_vector_db(vector_batch)
+        ingest_sql_db(sql_batch)
+    except:
+        delete_all_chroma_docs_when_seed()
+        raise
