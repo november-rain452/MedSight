@@ -87,3 +87,12 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
 # collection utils
 def count_docs():
     return collection.count()
+
+
+def delete_all_chroma_docs_when_seed():
+    batch_size = 1000
+    while True:
+        batch = collection.get(limit=batch_size)["ids"]
+        if not batch:
+            break
+        collection.delete(ids=batch)
