@@ -1,4 +1,4 @@
-from ..database.vectors.vector_store_config import collection
+from .vector_store_config import collection
 from .retrieval_utils import extract_keyword, if_keyword_exists
 
 # add hashid instead of loop numbers
