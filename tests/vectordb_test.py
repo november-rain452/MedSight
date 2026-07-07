@@ -1,7 +1,7 @@
 import pandas as pd
 from src.ingest import transformer
-from src.retrieval.retrieval_utils import format_chroma_retrieval_output
-from src.retrieval.vector_store import add_documents, count_docs, query_documents
+from database.vectors.retrieval_utils import format_chroma_retrieval_output
+from database.vectors.vector_store import add_documents, count_docs, query_documents
 from src.ingest.processors import facility_to_documents
 from src.database.vectors.vector_store_config import collection
 
