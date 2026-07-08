@@ -12,3 +12,9 @@ def retrieve_sql(parsed_query: dict):
 
     if parsed_query.get("city"):
         stmt = stmt.where(Facility.city == parsed_query["city"])
+
+    if parsed_query.get("country"):
+        stmt = stmt.where(Facility.country == parsed_query["country"])
+
+    if parsed_query.get("facility_type"):
+        stmt = stmt.where(Facility.facility_type == parsed_query["facility_type"])
