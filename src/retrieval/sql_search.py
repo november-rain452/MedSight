@@ -9,3 +9,6 @@ def retrieve_sql(parsed_query: dict):
         stmt = stmt.where(
             Facility.organization_type == parsed_query["organization_type"]
         )
+
+    if parsed_query.get("city"):
+        stmt = stmt.where(Facility.city == parsed_query["city"])
