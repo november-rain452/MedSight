@@ -1,5 +1,6 @@
 from ..database.sql.models.model import Facility
 from sqlalchemy import select
+from ..database.sql.services.api_services import execute_statement_service
 
 
 def retrieve_sql(parsed_query: dict):
@@ -18,3 +19,9 @@ def retrieve_sql(parsed_query: dict):
 
     if parsed_query.get("facility_type"):
         stmt = stmt.where(Facility.facility_type == parsed_query["facility_type"])
+
+    results = execute_statement_service(stmt)
+
+    if not results:
+        return []
+    return results.scalars().all()
