@@ -18,13 +18,13 @@ def retrieve_sql(parsed_query: dict):
         if value:
             stmt = stmt.where(column == value)
 
-    if "specialties" in parsed_query:
+    if parsed_query.get("specialties"):
         stmt = apply_specialty_filter(stmt, parsed_query["specialties"])
-    if "procedures" in parsed_query:
+    if parsed_query.get("procedures"):
         stmt = apply_procedure_filter(stmt, parsed_query["procedures"])
-    if "equipments" in parsed_query:
+    if parsed_query.get("equipments"):
         stmt = apply_equipment_filter(stmt, parsed_query["equipments"])
-    if "capabilities" in parsed_query:
+    if parsed_query.get("capabilities"):
         stmt = apply_capability_filter(stmt, parsed_query["capabilities"])
 
     results = execute_statement_service(stmt)
