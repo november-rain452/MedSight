@@ -1,5 +1,5 @@
 from ..database.sql.models.model import Facility
-from sqlalchemy import select
+from sqlalchemy import select, func, or_
 from ..database.sql.services.api_services import execute_statement_service
 
 FIELD_MAP = {
@@ -18,8 +18,21 @@ def retrieve_sql(parsed_query: dict):
         if value:
             stmt = stmt.where(column == value)
 
+    if "specialties" in parsed_query:
+        stmt = apply_specialty_filter(stmt, parsed_query["specialties"])
+
     results = execute_statement_service(stmt)
 
-    if not results:
-        return []
-    return results.scalars().all()
+    return results.scalars().all() if results is not None else []
+
+
+def apply_specialty_filter(stmt, specialties):
+    if not specialties:
+        return stmt
+
+    conditions = []
+
+    for specialty in specialties:
+        conditions.append(Facility.specialties.contains([specialty]))
+
+    return stmt.where(or_(*conditions))
