@@ -24,6 +24,8 @@ def retrieve_sql(parsed_query: dict):
         stmt = apply_procedure_filter(stmt, parsed_query["procedures"])
     if "equipments" in parsed_query:
         stmt = apply_equipment_filter(stmt, parsed_query["equipments"])
+    if "capabilities" in parsed_query:
+        stmt = apply_capability_filter(stmt, parsed_query["capabilities"])
 
     results = execute_statement_service(stmt)
 
@@ -62,5 +64,17 @@ def apply_equipment_filter(stmt, equipments):
 
     for equipment in equipments:
         conditions.append(Facility.equipment.contains([equipment]))
+
+    return stmt.where(or_(*conditions))
+
+
+def apply_capability_filter(stmt, capabilities):
+    if not capabilities:
+        return stmt
+
+    conditions = []
+
+    for capability in capabilities:
+        conditions.append(Facility.capability.contains([capability]))
 
     return stmt.where(or_(*conditions))
