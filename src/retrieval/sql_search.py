@@ -1,5 +1,5 @@
 from ..database.sql.models.model import Facility
-from sqlalchemy import select, func, or_
+from sqlalchemy import select, or_, func
 from ..database.sql.services.api_services import execute_statement_service
 
 FIELD_MAP = {
@@ -35,46 +35,42 @@ def retrieve_sql(parsed_query: dict):
 def apply_specialty_filter(stmt, specialties):
     if not specialties:
         return stmt
-
     conditions = []
-
     for specialty in specialties:
-        conditions.append(Facility.specialties.contains([specialty]))
-
+        conditions.append(
+            func.json_contains(Facility.specialties, func.json_quote(specialty))
+        )
     return stmt.where(or_(*conditions))
 
 
 def apply_procedure_filter(stmt, procedures):
     if not procedures:
         return stmt
-
     conditions = []
-
     for procedure in procedures:
-        conditions.append(Facility.procedure.contains([procedure]))
-
+        conditions.append(
+            func.json_contains(Facility.procedure, func.json_quote(procedure))
+        )
     return stmt.where(or_(*conditions))
 
 
 def apply_equipment_filter(stmt, equipments):
     if not equipments:
         return stmt
-
     conditions = []
-
     for equipment in equipments:
-        conditions.append(Facility.equipment.contains([equipment]))
-
+        conditions.append(
+            func.json_contains(Facility.equipment, func.json_quote(equipment))
+        )
     return stmt.where(or_(*conditions))
 
 
 def apply_capability_filter(stmt, capabilities):
     if not capabilities:
         return stmt
-
     conditions = []
-
     for capability in capabilities:
-        conditions.append(Facility.capability.contains([capability]))
-
+        conditions.append(
+            func.json_contains(Facility.capability, func.json_quote(capability))
+        )
     return stmt.where(or_(*conditions))
