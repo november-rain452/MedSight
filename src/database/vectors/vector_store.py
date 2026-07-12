@@ -63,6 +63,8 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     where_filter = None
     if doc_type:
         where_filter = {"type": doc_type}
+
+        # actual query
     results = collection.query(
         query_texts=query, n_results=n_results, where=where_filter
     )
@@ -84,7 +86,7 @@ def query_documents(query, n_results=5, doc_type=None, dist_threshold=0.8):
     return filtered
 
 
-# collection utils
+# collection/util funcs
 def count_docs():
     return collection.count()
 
