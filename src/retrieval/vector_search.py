@@ -1,3 +1,5 @@
+from ..database.vectors.vector_store import query_documents
+
 TYPE_SET = {"procedure", "equipment", "capability"}
 
 FIELD_MAP = {
@@ -11,6 +13,7 @@ FIELD_MAP = {
 }
 
 
+# call the vector db with the query
 def retrieve_vectors(parsed_query: dict):
 
     query_types = set()
@@ -21,7 +24,14 @@ def retrieve_vectors(parsed_query: dict):
 
     query = create_query(parsed_query, query_types)
 
+    query_results = []
 
+    for qtype in query_types:
+        result = query_documents(query, 7, qtype, 0.8)
+        query_results.append(result)
+
+
+# create a natural language vector query based on given query parameters
 def create_query(parsed_query: dict, query_types: set) -> str:
 
     if "organization_type" in parsed_query:
