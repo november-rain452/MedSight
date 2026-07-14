@@ -5,22 +5,27 @@ from ..repository.internal_repository import (
     insert_in_batch,
     get_facility_by_id,
 )
-from ....utils.custom_exceptions import DuplicateFacilityError
+from src.utils.custom_exceptions import DuplicateFacilityError
+from src.core.logger import logger
 
 
 # inserts
 def insert_facility_service(facility_data: FacilityCreate):
+    logger.info(f"Attempting to insert facility: {facility_data.fid}")
     with SessionLocal() as db:
         try:
             facility = insert_facility_repository(db, facility_data)
 
             db.commit()
             db.refresh(facility)
+            logger.info(f"Facility inserted successfully with ID: {facility.id}")
 
             return facility
-        except DuplicateFacilityError:
+        except DuplicateFacilityError as e:
+            logger.warning(f"Duplicate facility detected: {facility_data.name}. {e}")
             raise
-        except Exception:
+        except Exception as e:
+            logger.error(f"Facility insertion failed: {e}", exc_info=True)
             db.rollback()
             raise
 
@@ -28,17 +33,33 @@ def insert_facility_service(facility_data: FacilityCreate):
 def insert_in_batch_service(batch_sql: list[dict]):
 
     validated = [FacilityCreate.model_validate(row).model_dump() for row in batch_sql]
+    logger.info(f"Starting batch insertion of {len(validated)} facilities")
     with SessionLocal() as db:
         try:
             insert_in_batch(db, validated)
             db.commit()
-        except Exception:
+            logger.info(
+                f"Batch seeding successful. {len(validated)} facilities inserted."
+            )
+        except Exception as e:
+            logger.error(f"Batch seeding failed: {e}", exc_info=True)
             db.rollback()
             raise
 
 
 # gets
 def get_facility_by_id_service(facility_id: int):
+    logger.info(f"Retrieving facility by ID: {facility_id}")
     with SessionLocal() as db:
-        facility = get_facility_by_id(db, facility_id)
-        return facility
+        try:
+            facility = get_facility_by_id(db, facility_id)
+            if facility is None:
+                logger.warning(f"Facility with facility id: {facility_id} not found")
+            else:
+                logger.info(f"Facility found: ID {facility.id}")
+            return facility
+        except Exception as e:
+            logger.error(
+                f"Error retrieving facility ID {facility_id}: {e}", exc_info=True
+            )
+            raise
