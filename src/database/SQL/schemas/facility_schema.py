@@ -20,10 +20,10 @@ class FacilityResponse(BaseModel):
 
     id: int
     name: str
-    specialties: list[str]
-    procedure: list[str]
-    equipment: list[str]
-    capability: list[str]
+    specialties: list[str] | None
+    procedure: list[str] | None
+    equipment: list[str] | None
+    capability: list[str] | None
     organization_type: str | None = None
     city: str | None = None
     country: str | None = None
