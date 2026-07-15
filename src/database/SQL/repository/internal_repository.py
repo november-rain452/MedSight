@@ -2,7 +2,7 @@ from ..schemas.facility_schema import FacilityCreate, FacilityResponse
 from ..models.model import Facility
 from sqlalchemy.orm import Session
 from sqlalchemy import select, insert
-from ....utils.custom_exceptions import DuplicateFacilityError, EmptyBatchError
+from src.utils.custom_exceptions import DuplicateFacilityError, EmptyBatchError
 
 
 # inserts
