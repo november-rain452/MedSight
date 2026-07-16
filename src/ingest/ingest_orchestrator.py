@@ -4,6 +4,7 @@ from .vector_ingestor import ingest_vector_db
 from .transformer import transform_row, transform_row_to_facility
 from .processors import facility_to_documents
 from ..database.vectors.vector_store import delete_all_chroma_docs_when_seed
+from ..core.logger import logger
 
 
 def ingest_orchestrator_func():
@@ -20,6 +21,7 @@ def ingest_orchestrator_func():
     try:
         ingest_vector_db(vector_batch)
         ingest_sql_db(sql_batch)
-    except:
+    except Exception as e:
+        logger.error(f"Batch seeding failed: {e}", exc_info=True)
         delete_all_chroma_docs_when_seed()
         raise
