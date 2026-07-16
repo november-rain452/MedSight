@@ -1,5 +1,6 @@
 from .vector_store_config import collection
 from .retrieval_utils import extract_keyword, if_keyword_exists
+from src.core.logger import logger
 
 # add hashid instead of loop numbers
 import hashlib
@@ -98,3 +99,4 @@ def delete_all_chroma_docs_when_seed():
         if not batch:
             break
         collection.delete(ids=batch)
+    logger.error(f"Deleting all vectorDB docs ")
