@@ -1,5 +1,9 @@
+import re
+
+
 def clean_text(text):
-    return text.replace("  ", " ".strip())
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
 
 
 def facility_to_documents(facility: dict) -> list[dict]:
