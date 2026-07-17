@@ -1,5 +1,6 @@
 from ..database.vectors.vector_store import query_documents
 from ..core.logger import logger
+from .models import VectorResult
 
 TYPE_SET = {"procedure", "equipment", "capability"}
 
@@ -17,10 +18,9 @@ FIELD_MAP = {
 # call the vector db with the query
 def retrieve_vectors(
     parsed_query: dict[str, str], top_k: int = 7, threshold: float = 0.8
-) -> list[list]:
+) -> list[VectorResult]:
     """
     Query the vector database for present query parameters
-
 
     Args:
         parsed_query: dictionary with keys like 'organization_type', 'city', etc.
@@ -37,16 +37,27 @@ def retrieve_vectors(
 
     query_results = []
 
-    for qtype in query_types:
+    if query_types:
+        for qtype in query_types:
+            try:
+                query_res = query_documents(query, top_k, qtype, threshold)
+                result = format_vectordb_output(query_res)
+
+            except Exception as e:
+                logger.error(f"Vector query failed for type {qtype}: {e}")
+                result = []
+
+            query_results.append(result)
+    else:
         try:
-            result = query_documents(query, top_k, qtype, threshold)
+            query_res = query_documents(query, top_k, None, threshold)
+            result = format_vectordb_output(query_res)
+            query_results.append(result)
         except Exception as e:
-            logger.error(f"Vector query failed for type {qtype}: {e}")
+            logger.error(f"Vector query failed: {e}")
             result = []
 
-        query_results.append(result)
-
-    return query_results
+    return [item for res in query_results for item in res]
 
 
 # create a natural language vector query based on given query parameters
@@ -86,3 +97,23 @@ def create_query(parsed_query: dict, query_types: set) -> str:
 
     query = " ".join(parts)
     return query
+
+
+# formatting vectorDB output
+def format_vectordb_output(output: dict[str, list]) -> list[VectorResult]:
+    docs = output["documents"]
+    metas = output["metadatas"]
+    dists = output["distances"]
+
+    results = []
+
+    for i in range(len(docs)):
+        vec_result_obj = VectorResult(
+            facility_id=metas[i]["facility_id"],
+            content=docs[i],
+            metadata=metas[i],
+            distance=dists[i],
+        )
+        results.append(vec_result_obj)
+
+    return results
