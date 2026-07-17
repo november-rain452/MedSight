@@ -19,6 +19,7 @@ class FacilityResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    fid: str
     name: str
     specialties: list[str] | None
     procedure: list[str] | None
