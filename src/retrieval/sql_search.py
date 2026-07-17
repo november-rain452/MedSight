@@ -1,6 +1,8 @@
 from ..database.sql.models.model import Facility
 from sqlalchemy import select, or_, func
 from ..database.sql.services.api_services import execute_statement_service
+from .models import FacilityResult
+from ..database.sql.schemas.facility_schema import FacilityResponse
 
 FIELD_MAP = {
     "organization_type": Facility.organization_type,
@@ -28,8 +30,16 @@ def retrieve_sql(parsed_query: dict):
         stmt = apply_capability_filter(stmt, parsed_query["capabilities"])
 
     results = execute_statement_service(stmt)
-
-    return results.scalars().all() if results is not None else []
+    pyd_results = [
+        FacilityResult(
+            facility_id=res.fid,
+            facility=FacilityResponse.model_validate(res),
+            metadata={"source": "sql"},
+        )
+        for res in results.scalars().all()
+        if res is not None
+    ]
+    return pyd_results
 
 
 def apply_specialty_filter(stmt, specialties):
