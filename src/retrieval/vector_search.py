@@ -84,7 +84,7 @@ def create_query(parsed_query: dict, query_types: set) -> str:
         parts.append(("in " + ", ".join(location_parts)))
 
     if "facility_type" in parsed_query:
-        parts.append("{FIELD_MAP['facility_type']} {parsed_query['facility_type']}")
+        parts.append(f"{FIELD_MAP['facility_type']} {parsed_query['facility_type']}")
 
     if "procedure" in query_types:
         parts.append(f"{FIELD_MAP['procedure']}{parsed_query['procedure']}")
